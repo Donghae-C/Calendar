@@ -11,5 +11,9 @@ public interface MemberMapper {
 	//@Select("select * from member")
 	public List<MemberVO> getList();
 	public List<MemberVO> getGroupMember(MgroupVO mgroup);
-	public void insert(MemberVO member);
+	public int insert(MemberVO member);
+	public List<MemberVO> searchName(MemberVO member);
+	public MemberVO selectOne(String m_id);
+	public int delete(MemberVO member);
+	public int update(MemberVO member);
 }
