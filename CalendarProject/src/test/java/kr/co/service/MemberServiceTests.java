@@ -35,4 +35,10 @@ public class MemberServiceTests {
 		
 		log.info(member.getM_id());
 	}
+	
+	@Test
+	public void testSearchOne() {
+		MemberVO member = service.searchOne("admin");
+		log.info(member);
+	}
 }
