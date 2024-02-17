@@ -13,7 +13,7 @@ public interface MemberMapper {
 	public List<MemberVO> getGroupMember(MgroupVO mgroup);
 	public int insert(MemberVO member);
 	public List<MemberVO> searchName(MemberVO member);
-	public MemberVO selectOne(String m_id);
+	public MemberVO selectOne(MemberVO member);
 	public int delete(MemberVO member);
 	public int update(MemberVO member);
 }

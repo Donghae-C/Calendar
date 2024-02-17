@@ -28,36 +28,67 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MemberVO searchOne(String m_id) {
+	public MemberVO searchOne(MemberVO member) {
 		log.info("searchOne.......");
-		
-		return mapper.selectOne(m_id);
+		return mapper.selectOne(member);
 	}
 
 	@Override
 	public boolean delete(MemberVO member) {
-		return false;
+		int result = mapper.delete(member);
+		log.info(result);
+		boolean result2 = false;
+		if(result > 0) {
+			result2 = true;
+		}
+		return result2;
 	}
 
 	@Override
 	public boolean update(MemberVO member) {
-		// TODO Auto-generated method stub
-		return false;
+		int result = mapper.update(member);
+		boolean result2 = false;
+		if(result>0) {
+			result2 = true;
+		}
+		return result2;
 	}
 
 	@Override
 	public List<MemberVO> listAll() {
-		return null;
+		
+		return mapper.getList();
 	}
 
 	@Override
 	public List<MemberVO> listGroupMember(MgroupVO mgroup) {
-		return null;
+		
+		return mapper.getGroupMember(mgroup);
 	}
 
 	@Override
 	public List<MemberVO> searchbyName(MemberVO member) {
-		return null;
+		log.info("searchbyName.....");
+		return mapper.searchName(member);
+	}
+
+	@Override
+	public boolean login(MemberVO member) {
+		MemberVO check = mapper.selectOne(member);
+		boolean result = false;
+		if(check == null) {
+			log.info("id없음");
+		}else {
+			log.info("id존재");
+			if(!check.getM_pw().equals(member.getM_pw())) {
+				log.info("비밀번호 틀림");
+			}else {
+				log.info("비밀번호 맞음");
+				log.info("로그인 성공");
+				result = true;
+			}
+		}
+		return result;
 	}
 
 }

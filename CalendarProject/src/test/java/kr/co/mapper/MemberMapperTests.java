@@ -58,7 +58,9 @@ public class MemberMapperTests {
 	}
 	//@Test
 	public void testSelectOne() {
-		MemberVO member = mapper.selectOne("admin2");
+		MemberVO member = new MemberVO();
+		member.setM_id("admin2");
+		member = mapper.selectOne(member);
 		log.info(member);
 	}
 	
@@ -71,7 +73,9 @@ public class MemberMapperTests {
 	}
 	@Test
 	public void testUpdate() {
-		MemberVO member = mapper.selectOne("testid");
+		MemberVO member = new MemberVO();
+		member.setM_id("testid");
+		member = mapper.selectOne(member);
 		member.setM_name("수정함");
 		member.setM_email("abcc@fef.cve");
 		int result = mapper.update(member);
