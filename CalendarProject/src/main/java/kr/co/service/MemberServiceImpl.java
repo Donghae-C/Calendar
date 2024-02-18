@@ -46,7 +46,12 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public boolean update(MemberVO member) {
-		int result = mapper.update(member);
+		MemberVO updated = mapper.selectOne(member);
+		updated.setM_pw(member.getM_pw());
+		updated.setM_name(member.getM_name());
+		updated.setM_email(member.getM_email());
+		updated.setM_public(member.getM_public());
+		int result = mapper.update(updated);
 		boolean result2 = false;
 		if(result>0) {
 			result2 = true;

@@ -1,5 +1,8 @@
 package kr.co.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,18 +47,42 @@ public class MemberController {
 	}
 	
 	@GetMapping("/listgroupmember")
-	public void listGroupMember(@RequestParam("g_name") String g_name, Model model) {
+	public void listGroupMember(MgroupVO mgroup, Model model) {
 		log.info("/listgroupmember");
-		MgroupVO mgroup = new MgroupVO();
-		mgroup.setG_name(g_name);
 		model.addAttribute("listgroupmember", service.listGroupMember(mgroup));
 	}
 	
 	@GetMapping("/searchbyname")
-	public void searchByName(@RequestParam("m_name") String m_name, Model model) {
+	public void searchByName(MemberVO member, Model model) {
 		log.info("/searchbyname");
-		MemberVO member = new MemberVO();
-		member.setM_name(m_name);
 		model.addAttribute("searchbyname", service.searchbyName(member));
+	}
+	
+	@PostMapping("/update")
+	public String update(MemberVO member, Model model) {
+		log.info("/update");
+		model.addAttribute("update", service.update(member));
+		return "redirect:/member/list";
+	}
+	
+	@PostMapping("/delete")
+	public String delete(MemberVO member, Model model) {
+		log.info("/delete");
+		model.addAttribute("delete", service.delete(member));
+		return "redirect:/member/list";
+	}
+	@GetMapping("/login")
+	public String login(MemberVO member, Model model, HttpServletRequest req) {
+		log.info("login");
+		HttpSession session = req.getSession();
+		if(service.login(member)) {
+			member = service.searchOne(member);
+			log.info(member.getM_id()+"님 로그인함");
+			session.setAttribute("login", member);
+		}else {
+			return("/member/login");
+		}
+		log.info(session.getAttribute("login"));
+		return("redirect:/");
 	}
 }

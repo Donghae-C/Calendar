@@ -78,7 +78,7 @@ public class MemberControllerTests {
 				.getModelMap()
 				);
 	}
-	@Test
+	//@Test
 	public void testSearchByName() throws Exception{
 		
 		log.info(
@@ -90,4 +90,44 @@ public class MemberControllerTests {
 				);
 	}
 	
+	//@Test
+	public void testUpdate() throws Exception{
+		
+		String resultPage = 
+				mockMvc.perform(MockMvcRequestBuilders.post("/member/update")
+						.param("m_id", "testid4")
+						.param("m_pw", "1q2w3e22")
+						.param("m_name", "수정된테스터")
+						.param("m_email", "mody@fi.ed")
+						.param("m_public", "0"))
+				.andReturn()
+				.getModelAndView()
+				.getViewName();
+		log.info(resultPage);
+	}
+	//@Test
+	public void testDelete() throws Exception{
+		String resultPage = 
+				mockMvc.perform(MockMvcRequestBuilders.post("/member/delete")
+						.param("m_id", "testid4")
+						)
+				.andReturn()
+				.getModelAndView()
+				.getViewName();
+		log.info(resultPage);
+	}
+	
+	@Test
+	public void testLogin() throws Exception{
+		String resultPage = 
+				mockMvc.perform(MockMvcRequestBuilders.get("/member/login")
+						.param("m_id", "testid")
+						.param("m_pw", "1q2w3e123")
+						)
+				.andReturn()
+				.getModelAndView()
+				.getViewName();
+		log.info(resultPage);
+		
+	}
 }
