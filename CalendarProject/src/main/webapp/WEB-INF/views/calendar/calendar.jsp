@@ -225,16 +225,20 @@
         		</div>
 		    </div>
 		    <div class="mydates">
+		    	<div class="row">
+		    		<div class="col-1"></div>
+		    		<div class="col-2">시간</div>
+		    		<div class="col-2">제목</div>
+		    		<div class="col-7">내용</div>
             	<c:if test="${getdate != null }">
 					<c:forEach var="cal" items="${getdate}">
-					<div class="row">
-						<div class="col-4">시간 : ${cal.c_time}</div>
-						<div class="col-4">제목 : ${cal.c_title}</div>
-						<div class="col-4">내용 : ${cal.c_content}</div>
-						
-					</div>
-					</c:forEach>            		
+						<div class="col-1"><input type="checkbox"></div>
+						<div class="col-2">${cal.c_time}</div>
+						<div class="col-2">${cal.c_title}</div>
+						<div class="col-7">${cal.c_content}</div>
+					</c:forEach> 
             	</c:if>
+            	</div>   
             </div>
     	</div>
     </div>
