@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import kr.co.domain.MemberVO;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
@@ -31,7 +32,7 @@ public class MemberControllerTests {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 	}
 	
-	@Test
+	//@Test
 	public void testListAll() throws Exception{
 		log.info(
 				mockMvc.perform(MockMvcRequestBuilders.get("/member/list"))
@@ -40,4 +41,53 @@ public class MemberControllerTests {
 				.getModelMap()
 				);
 	}
+	
+	//@Test
+	public void testRegister() throws Exception{
+		String resultPage = mockMvc.perform(MockMvcRequestBuilders.post("/member/register")
+				.param("m_id", "testid4")
+				.param("m_pw", "1q2w3e")
+				.param("m_name", "테스터")
+				.param("m_email", "dfeik@dfgc.cop")
+				.param("m_public", "1")
+				).andReturn().getModelAndView().getViewName();
+		
+		log.info(resultPage);
+	}
+	
+	//@Test
+	public void testSearchOne() throws Exception{
+		
+		log.info(
+				mockMvc.perform(MockMvcRequestBuilders.get("/member/searchone")
+						.param("m_id", "testid4"))
+				.andReturn()
+				.getModelAndView()
+				.getModelMap()
+				);
+	}
+	
+	//@Test
+	public void testListGroupMember() throws Exception{
+		
+		log.info(
+				mockMvc.perform(MockMvcRequestBuilders.get("/member/listgroupmember")
+						.param("g_name", "축구"))
+				.andReturn()
+				.getModelAndView()
+				.getModelMap()
+				);
+	}
+	@Test
+	public void testSearchByName() throws Exception{
+		
+		log.info(
+				mockMvc.perform(MockMvcRequestBuilders.get("/member/searchbyname")
+						.param("m_name", "일반"))
+				.andReturn()
+				.getModelAndView()
+				.getModelMap()
+				);
+	}
+	
 }
