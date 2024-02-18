@@ -333,6 +333,7 @@
             document.getElementById("resultform").action = "/calendar/getdate"
             document.getElementById("resultform").submit();
         }
+
     </script>
   </body>
 </html>
