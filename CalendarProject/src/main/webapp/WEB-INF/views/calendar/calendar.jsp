@@ -149,6 +149,9 @@
         	border: 1px solid green;
         	margin: 0 auto;
         }
+        .dhcode{
+        	display: none;
+        }
     </style>
   </head>
   <body data-bs-theme="dark">
@@ -203,6 +206,10 @@
           </nav>
           <div class="row" id="mainbox">
             <div class="card col-6" id="secondcard">
+            	<select class="">
+            		<option>ㅋ</option>
+            		<option>ㄴ</option>
+            	</select>
     		</div>
           	<div class="sec_cal card col-6">
           
@@ -226,13 +233,13 @@
 		    </div>
 		    <div class="mydates">
 		    	<div class="row">
-		    		<div class="col-1"></div>
+		    		<div class="col-1 dhcode"></div>
 		    		<div class="col-2">시간</div>
 		    		<div class="col-2">제목</div>
 		    		<div class="col-7">내용</div>
             	<c:if test="${getdate != null }">
 					<c:forEach var="cal" items="${getdate}">
-						<div class="col-1"><input type="checkbox"></div>
+						<div class="col-1 dhcode"><input type="checkbox"></div>
 						<div class="col-2">${cal.c_time}</div>
 						<div class="col-2">${cal.c_title}</div>
 						<div class="col-7">${cal.c_content}</div>
