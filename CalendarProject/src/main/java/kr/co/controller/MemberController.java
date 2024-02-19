@@ -1,5 +1,7 @@
 package kr.co.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -77,12 +79,23 @@ public class MemberController {
 		HttpSession session = req.getSession();
 		if(service.login(member)) {
 			member = service.searchOne(member);
+			List<MgroupVO> gList = service.getMyGroup(member);
 			log.info(member.getM_id()+"님 로그인함");
 			session.setAttribute("login", member);
+			session.setAttribute("gList", gList);
 		}else {
 			return("/member/login");
 		}
 		log.info(session.getAttribute("login"));
 		return("redirect:/");
 	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest req) {
+		log.info("logout");
+		HttpSession session = req.getSession(false);
+		session.invalidate();
+		return("redirect:/");
+	}
+	
 }

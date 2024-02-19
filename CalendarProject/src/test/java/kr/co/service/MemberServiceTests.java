@@ -85,12 +85,18 @@ public class MemberServiceTests {
 		List<MemberVO> mlist = service.listGroupMember(mgroup);
 		mlist.forEach(member -> log.info(member));
 	}
-	@Test
+	//@Test
 	public void testLogin() {
 		MemberVO member = new MemberVO();
 		member.setM_id("admin3");
 		member.setM_pw("1q2w3e");
 		log.info(service.login(member));
+	}
+	@Test
+	public void testGetMyGroup() {
+		MemberVO member = new MemberVO();
+		member.setM_id("admin");
+		log.info(service.getMyGroup(member));
 	}
 	
 	

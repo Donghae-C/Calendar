@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class CalendarVO {
+	private int c_no;
 	private LocalDate c_date;
 	private LocalTime c_time;
 	private String g_name;

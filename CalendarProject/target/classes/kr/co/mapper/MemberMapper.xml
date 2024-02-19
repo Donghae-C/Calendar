@@ -14,6 +14,9 @@
 	<select id="selectOne" resultType="kr.co.domain.MemberVO">
 		select * from member where m_id = #{m_id}
 	</select>
+	<select id="getMyGroup" resultType="kr.co.domain.MgroupVO">
+		select * from mgroup where m_id = #{m_id}
+	</select>
 	<insert id="insert">
 		insert into member(m_id, m_pw, m_name, m_email, m_public) 
 		values(#{m_id}, #{m_pw}, #{m_name}, #{m_email}, #{m_public});

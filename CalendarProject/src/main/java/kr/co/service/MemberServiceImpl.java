@@ -96,4 +96,11 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
+	@Override
+	public List<MgroupVO> getMyGroup(MemberVO member) {
+		
+		
+		return mapper.getMyGroup(member);
+	}
+
 }

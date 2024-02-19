@@ -14,4 +14,5 @@ public interface MemberService {
 	public List<MemberVO> listGroupMember(MgroupVO mgroup);
 	public List<MemberVO> searchbyName(MemberVO member);
 	public boolean login(MemberVO member);
+	public List<MgroupVO> getMyGroup(MemberVO member);
 }

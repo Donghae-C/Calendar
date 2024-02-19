@@ -4,8 +4,16 @@
 <mapper namespace="kr.co.mapper.CalendarMapper">
 	<select id="getDate" resultType="kr.co.domain.CalendarVO">
 		select * from calendar
-		where c_date = #{c_date}
+		where c_date = #{c_date} and g_name = #{g_name}
 	</select>
-	
-	
+	<select id="getMonth" resultType="kr.co.domain.CalendarVO">
+		<![CDATA[
+        SELECT *
+        FROM calendar
+        WHERE MONTH(c_date) = #{c_month} and YEAR(c_date) = #{c_year} and g_name = #{g_name};
+    	]]>
+	</select>
+	<insert id="insertCal">
+		insert into calendar(c_date, c_time, g_name, c_title, c_content) value(#{c_date}, #{c_time}, #{g_name}, #{c_title}, #{c_content})
+	</insert>
 </mapper>

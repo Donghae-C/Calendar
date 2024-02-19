@@ -152,6 +152,9 @@
         .dhcode{
         	display: none;
         }
+        #ins_ctime{
+        	width: 100%;
+        }
     </style>
   </head>
   <body data-bs-theme="dark">
@@ -193,9 +196,16 @@
                         </ol>
                       </nav>
                   </li>
+                  <c:if test="${sessionScope.login eq null}">
                   <li class="nav-item">
                   	<a class="nav-link" href="/member/login">로그인</a>
                   </li>
+                  </c:if>
+                  <c:if test="${sessionScope.login ne null}">
+                  <li class="nav-item">
+                  	<a class="nav-link" href="/member/logout">로그아웃</a>
+                  </li>
+                  </c:if>
                 </ul>
                 <form class="d-flex" role="search">
                   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -206,10 +216,18 @@
           </nav>
           <div class="row" id="mainbox">
             <div class="card col-6" id="secondcard">
-            	<select class="">
-            		<option>ㅋ</option>
-            		<option>ㄴ</option>
+            	<select class="" id="mySelect" onchange="getMonth()">
+            		<option selected="selected">선택해주세요</option>
+            		<c:if test="${sessionScope.login ne null}">
+            			<c:forEach var="group" items="${sessionScope.gList}">
+            			<option value="${group.g_name}">${group.g_name}</option>
+            			</c:forEach>
+            		</c:if>
             	</select>
+            <c:if test="${sessionScope.login.m_grade eq 3}">
+            	<input type="button" value="삭제" onclick="displayCheck()">
+            	<input type="button" value="등록" onclick="displayInsert()">
+            </c:if>
     		</div>
           	<div class="sec_cal card col-6">
           
@@ -237,15 +255,16 @@
 		    		<div class="col-2">시간</div>
 		    		<div class="col-2">제목</div>
 		    		<div class="col-7">내용</div>
-            	<c:if test="${getdate != null }">
-					<c:forEach var="cal" items="${getdate}">
-						<div class="col-1 dhcode"><input type="checkbox"></div>
-						<div class="col-2">${cal.c_time}</div>
-						<div class="col-2">${cal.c_title}</div>
-						<div class="col-7">${cal.c_content}</div>
-					</c:forEach> 
-            	</c:if>
-            	</div>   
+		    	</div>
+		    	<div class="row" id="insertbox">
+		    		<div class="col-2"><input type="time" id="ins_ctime"></div>
+	           		<div class="col-2" contenteditable="true" id="ins_ctitle"></div>
+	            	<div class="col-7" contenteditable="true" id="ins_ccontent"></div>
+	            	<div class="col-1 insertbox btn" onclick="insertCal()">등록</div>
+		    	</div>
+		    	<div class="row" id="resultbox" class="myCalresult">
+            		
+            	</div>
             </div>
     	</div>
     </div>
@@ -253,6 +272,7 @@
     <input type="hidden" id="ca_year" name="ca_year">
     <input type="hidden" id="ca_month" name="ca_month">
     <input type="hidden" id="ca_date" name="ca_date">
+    <input type="hidden" id="gr_name" name="gr_name">
     </form>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
@@ -260,6 +280,10 @@
   	<script>
         $(document).ready(function () {
             calendarInit();
+            var curDate = new Date();
+            $("#ca_year").val(curDate.getFullYear());
+            $("#ca_month").val(curDate.getMonth()+1);
+            $("#ca_date").val(curDate.getDate());
         });
         var date = new Date();
         var utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000);
@@ -298,7 +322,7 @@
                 }
 
                 for (var i = 1; i <= nextDate; i++) {
-                    calendar.innerHTML = calendar.innerHTML + '<div class="day current" onclick="getDate(' + i + ')">' + i + '</div>'
+                    calendar.innerHTML = calendar.innerHTML + '<div class="day current" id="'+i+'num" onclick="getDate(' + i + ')">' + i + '</div>'
                 }
 
                 for (var i = 1; i <= (7 - nextDay == 7 ? 0 : 7 - nextDay); i++) {
@@ -316,24 +340,184 @@
             $('.go-prev').on('click', function () {
                 thisMonth = new Date(currentYear, currentMonth - 1, 1);
                 renderCalender(thisMonth);
+             	getMonth();
             });
 
             $('.go-next').on('click', function () {
                 thisMonth = new Date(currentYear, currentMonth + 1, 1);
                 renderCalender(thisMonth);
+                getMonth();
             });
         }
-
         function getDate(i) {
+        	var selectedGroup = document.getElementById("mySelect").value; 
             mycalendar = document.querySelector('.mydates');
-            currentMonth2 = currentMonth+1
+            var currentMonth2 = currentMonth+1
             document.getElementById("ca_year").value = currentYear;
             document.getElementById("ca_month").value = currentMonth2;
             document.getElementById("ca_date").value = i;
-            document.getElementById("resultform").action = "/calendar/getdate"
-            document.getElementById("resultform").submit();
+            console.log(document.getElementById("ca_year").value);
+            console.log(document.getElementById("ca_month").value);
+            console.log(document.getElementById("ca_date").value);
+            $.ajax({
+                type: 'GET',
+                url: '/calrest/getdate',
+                data: {
+                    ca_year: currentYear,
+                    ca_month: currentMonth2,
+                    ca_date: i,
+                 	gr_name: selectedGroup
+                },
+                dataType: 'json',
+                success: function(result) {
+                    // 성공 시 결과를 화면에 표시
+                    displayResult(result)
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
         }
+		function displayResult(result) {
+			mycalendar = document.getElementById("resultbox")
+		    
+		    // 기존 데이터 삭제
+		    mycalendar.innerHTML = '';
 
+		    // 결과가 비어있는지 확인
+		    if (result.length === 0) {
+		        mycalendar.innerHTML = 'No data available.';
+		        return;
+		    }
+
+		    // 결과 반복 처리
+		    result.forEach(function(cal) {
+		    	console.log(cal.c_time);
+		        // 각 CalendarVO 객체를 HTML로 추가
+		        var html = `
+		            <div class="col-1 dhcode"><input type="checkbox" value="`+cal.c_no+`"></div>
+		            <div class="col-2">`+cal.c_time[0]+`:`+cal.c_time[1]+`</div>
+		            <div class="col-2">`+cal.c_title+`</div>
+		            <div class="col-7">`+cal.c_content+`</div>
+		        `;
+		    
+		        // HTML을 mycalendar에 추가
+		        mycalendar.innerHTML += html;
+		    });
+		}
+		function displayCheck() {
+			if(document.getElementById("mySelect").value == "선택해주세요"){
+				alert("그룹을 선택해주세요");
+				return;
+			}
+		    var elements = document.getElementsByClassName("dhcode");
+
+		    for (var i = 0; i < elements.length; i++) {
+		        elements[i].style.display = "block";
+		    }
+		}
+		function displayInsert(){
+			if(document.getElementById("mySelect").value == "선택해주세요"){
+				alert("그룹을 선택해주세요");
+				return;
+			}
+		}
+		function insertCal() {
+			if(document.getElementById("mySelect").value == "선택해주세요"){
+				alert("그룹을 선택해주세요");
+				return;
+			}
+			var selectedGroup = document.getElementById("mySelect").value;
+			mycalendar = document.querySelector('.mydates');
+            currentMonth2 = currentMonth+1;
+            var currentDate2 = document.getElementById("ca_date").value;
+            var currentDate3 = Number(currentDate2);
+            var currentTime2 = document.getElementById("ins_ctime").value;
+            var ctitle = document.getElementById("ins_ctitle").innerText;
+            var ccontent = document.getElementById("ins_ccontent").innerText;
+            $.ajax({
+                type: 'POST',
+                url: '/calrest/insertcal',
+                data: {
+                    ca_year: currentYear,
+                    ca_month: currentMonth2,
+                    ca_date: currentDate2,
+                    ca_time: currentTime2,
+                 	gr_name: selectedGroup,
+                 	ca_title: ctitle,
+                 	ca_content: ccontent
+                },
+                dataType: 'text',
+                success: function(result) {
+                    // 성공 시 결과를 화면에 표시
+                    getMonth();
+                    getDate(currentDate3);
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+		}
+		function getMonth(){
+			var selectedGroup = document.getElementById("mySelect").value; 
+            mycalendar = document.querySelector('.mydates');
+            var currentMonth2 = currentMonth+1
+            var currentDate2 = document.getElementById("ca_date").value;
+            var currentDate3 = Number(currentDate2);
+            console.log(currentYear);
+            console.log(currentMonth2);
+            $.ajax({
+                type: 'GET',
+                url: '/calrest/getmonth',
+                data: {
+                    ca_year: currentYear,
+                    ca_month: currentMonth2,
+                 	gr_name: selectedGroup
+                },
+                dataType: 'json',
+                success: function(result) {
+                    // 성공 시 결과를 화면에 표시
+                    displaydot(result);
+                    
+                    
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+		}
+		function displaydot(result) {
+			var checkdate = document.getElementsByClassName("current")
+			for (var i = 0; i < checkdate.length; i++) {
+				var iplus = i+1;
+				checkdate[i].innerHTML = iplus;
+			}
+		    if (result.length === 0) {
+		    	console.log("이번달은 스케줄이 없음")
+		        return;
+		    }
+		    result.forEach(function(cal) {
+		    	var cMonth = new Date(cal.c_date);
+		    	var cDate = cMonth.getDate();
+		        for(var i = 0; i<checkdate.length;i++){
+		        	var check = i+1;
+		        	if(check == cDate){
+		        		checkdate[i].innerHTML = check + "<br>new"
+		        	}
+		        }
+		        
+		    });
+		}
+		function test() {
+			console.log(document.getElementById("ins_ctime").value)
+		}
+		$(document).on('click', '.current', function() {
+		    $(".current").removeClass('today');
+		    $(this).addClass('today');
+		});
+		function selectToday(){
+			
+		}
     </script>
   </body>
 </html>
