@@ -1,17 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@include file="../includes/header.jsp"%>
-
-	<style>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>    
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>테스트 메인페이지</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <style>
+        .main{
+            width: 80%;
+            margin: auto;
+        }
         .sec_cal {
-            width: 100%;
-            max-width: 500px;
+            
+            min-width: 350px;
             display: flex;
             float: left;
             margin: 0 auto;
             font-family: "NotoSansR";
-            border: 0px;
         }
 
         .sec_cal .cal_nav {
@@ -130,7 +140,13 @@
         }
         #secondcard{
         	min-width: 350px;
-        	border: 0px;
+        	height: 200px;
+        	border: 1px solid red;
+        	margin: 0 auto;
+        }
+        #mainbox{
+        	width: 80%;
+        	border: 1px solid green;
         	margin: 0 auto;
         }
         .dhcode{
@@ -139,49 +155,65 @@
         #ins_ctime{
         	width: 100%;
         }
-        #displayDelCheck, #insertbox{
-			display: none;
-        }
-        .fleft{
-        	float: left;
-        	border: 1px solid red;
-        }
-        #ins_ctimebox{
-            width: 50%;
-            max-width: 200px;
-            height: 30px;
-        }
-        #ins_ctitle{
-        	width: 50%;
-        	max-width: 300px;
-        	height: 30px;
-        }
-        #ins_ccontent{
-        	width: 80%;
-        	max-width: 1000px;
-        	height: 30px;
-        }
-        #ins_btn{
-        	width: 20%;
-        	max-width: 200px;
-        	height: 30px;
-        }
-        <div class="col-2 fleft" id="ins_ctimebox"><input type="time" id="ins_ctime"></div>
-	           		<div class="col-2 fleft" contenteditable="true" id="ins_ctitle"></div>
-	            	<div class="col-7 fleft" contenteditable="true" id="ins_ccontent"></div>
-	            	<div class="col-1 insertbox btn fleft" id="ins_btn" onclick="insertCal()">등록</div>
-        </style>
-<%@include file="../includes/header2.jsp"%>
+    </style>
+  </head>
+  <body data-bs-theme="dark">
+    <div class="main">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="/">mydhcode</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="togglebtn">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">무엇을</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">만들지</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      고민해보자
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="/calendar/">스케줄</a></li>
+                      <li><a class="dropdown-item" href="#">게시판비슷한걸</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="#">추가해야하나</a></li>
+                    </ul>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link">   </a>
+                  </li>
                   <li class="nav-item">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb"  style="padding: 8px;">
-                          <li class="breadcrumb-item"><a href="/">Home</a></li>
-                          <li class="breadcrumb-item active" aria-current="page">Calendar</li>
+                          <li class="breadcrumb-item"><a href="#">Home</a></li>
+                          <li class="breadcrumb-item active" aria-current="page">Data</li>
                         </ol>
                       </nav>
                   </li>
-<%@include file="../includes/header3.jsp"%>
-	<div class="row" id="mainbox">
+                  <c:if test="${sessionScope.login eq null}">
+                  <li class="nav-item">
+                  	<a class="nav-link" href="/member/login">로그인</a>
+                  </li>
+                  </c:if>
+                  <c:if test="${sessionScope.login ne null}">
+                  <li class="nav-item">
+                  	<a class="nav-link" href="/member/logout">로그아웃</a>
+                  </li>
+                  </c:if>
+                </ul>
+                <form class="d-flex" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+              </div>
+            </div>
+          </nav>
+          <div class="row" id="mainbox">
             <div class="card col-6" id="secondcard">
             	<select class="" id="mySelect" onchange="getMonth()">
             		<option selected="selected">선택해주세요</option>
@@ -191,7 +223,10 @@
             			</c:forEach>
             		</c:if>
             	</select>
-            	<input type="button" id="displayDelCheck" value="삭제" onclick="displayCheck()">
+            <c:if test="${sessionScope.login.m_grade eq 3}">
+            	<input type="button" value="삭제" onclick="displayCheck()">
+            	<input type="button" value="등록" onclick="displayInsert()">
+            </c:if>
     		</div>
           	<div class="sec_cal card col-6">
           
@@ -221,10 +256,10 @@
 		    		<div class="col-7">내용</div>
 		    	</div>
 		    	<div class="row" id="insertbox">
-		    		<div class="col-2 fleft" id="ins_ctimebox"><input type="time" id="ins_ctime"></div>
-	           		<div class="col-2 fleft" contenteditable="true" id="ins_ctitle"></div>
-	            	<div class="col-7 fleft" contenteditable="true" id="ins_ccontent"></div>
-	            	<div class="col-1 insertbox btn fleft" id="ins_btn" onclick="insertCal()">등록</div>
+		    		<div class="col-2"><input type="time" id="ins_ctime"></div>
+	           		<div class="col-2" contenteditable="true" id="ins_ctitle"></div>
+	            	<div class="col-7" contenteditable="true" id="ins_ccontent"></div>
+	            	<div class="col-1 insertbox btn" onclick="insertCal()">등록</div>
 		    	</div>
 		    	<div class="row" id="resultbox" class="myCalresult">
             		
@@ -232,15 +267,16 @@
             </div>
     	</div>
     </div>
-    
     <form action="" id="resultform" method="get">
     <input type="hidden" id="ca_year" name="ca_year">
     <input type="hidden" id="ca_month" name="ca_month">
     <input type="hidden" id="ca_date" name="ca_date">
     <input type="hidden" id="gr_name" name="gr_name">
     </form>
-<%@include file="../includes/body.jsp"%>
-	<script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    
+  	<script>
         $(document).ready(function () {
             calendarInit();
             var curDate = new Date();
@@ -312,32 +348,6 @@
                 getMonth();
             });
         }
-        function displayDel() {
-        	var selectedGroup = document.getElementById("mySelect").value;
-        	$.ajax({
-                type: 'GET',
-                url: '/calrest/adminchk',
-                data: {
-                 	gr_name: selectedGroup
-                },
-                dataType: 'text',
-                success: function(result) {
-                    // 성공 시 결과를 화면에 표시
-                	if(result == "y"){
-                		document.getElementById("displayDelCheck").style.display = 'block';
-                		document.getElementById("insertbox").style.display = 'block'
-                	}else{
-                		document.getElementById("displayDelCheck").style.display = 'none';
-                		document.getElementById("insertbox").style.display = 'none'
-                	}
-                },
-                error: function(error) {
-                    console.log('Error:', error);
-                }
-            });
-        	
-		}
-        
         function getDate(i) {
         	var selectedGroup = document.getElementById("mySelect").value; 
             mycalendar = document.querySelector('.mydates');
@@ -467,9 +477,7 @@
                 success: function(result) {
                     // 성공 시 결과를 화면에 표시
                     displaydot(result);
-                    displayDel();
-        			mycalendar = document.getElementById("resultbox")
-        		    mycalendar.innerHTML = '';
+                    
                     
                 },
                 error: function(error) {
@@ -510,4 +518,5 @@
 			
 		}
     </script>
-<%@include file="../includes/footer.jsp"%>
+  </body>
+</html>

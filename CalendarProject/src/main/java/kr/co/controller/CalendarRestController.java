@@ -5,6 +5,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -16,7 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.domain.CalendarVO;
+import kr.co.domain.MemberVO;
+import kr.co.domain.MgroupVO;
 import kr.co.service.CalendarService;
+import kr.co.service.MgroupService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
@@ -26,7 +32,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class CalendarRestController {
 	private CalendarService service;
-
+	private MgroupService mservice;
     @GetMapping("/getdate")
     @ResponseBody
     public List<CalendarVO> getdate(@RequestParam("ca_year") String ca_year,
@@ -50,9 +56,24 @@ public class CalendarRestController {
     @ResponseBody
 	public List<CalendarVO> getGroupCal(@RequestParam("ca_year") String ca_year,
 								@RequestParam("ca_month") String ca_month,
-								@RequestParam("gr_name") String gr_name) {
+								@RequestParam("gr_name") String gr_name,
+								Model model, HttpServletRequest req) {
 		log.info("/getmonth");
 		List<CalendarVO> cList = service.getMonth(ca_month, ca_year, gr_name);
+		HttpSession session = req.getSession(false);
+		MemberVO member = (MemberVO)session.getAttribute("login");
+		String m_id = member.getM_id();
+		MgroupVO mgroup = new MgroupVO();
+		mgroup.setM_id(m_id);
+		mgroup.setG_name(gr_name);
+		mgroup = mservice.getOneGroup(mgroup);
+		log.info(mgroup);
+		if(mgroup.getG_grade() == 3) {
+			log.info("3이 맞음");
+			model.addAttribute("auth","y");
+		}else {
+			model.addAttribute("auth","n");
+		}
 		log.info(cList);
 		return cList;
 	}
@@ -88,6 +109,26 @@ public class CalendarRestController {
 			log.error("Error in /insertcal", e);
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred");
 		}
+    }
+    @GetMapping("/adminchk")
+    @ResponseBody
+    public String adminChk(@RequestParam("gr_name") String gr_name, HttpServletRequest req) {
+    	HttpSession session = req.getSession(false);
+		MemberVO member = (MemberVO)session.getAttribute("login");
+		String m_id = member.getM_id();
+		MgroupVO mgroup = new MgroupVO();
+		mgroup.setM_id(m_id);
+		mgroup.setG_name(gr_name);
+		mgroup = mservice.getOneGroup(mgroup);
+		log.info(mgroup);
+		String result = null;
+		if(mgroup.getG_grade() == 3) {
+			log.info("3이 맞음");
+			result = "y";
+		}else {
+			result = "n";
+		}
+		return result;
     }
     
     
