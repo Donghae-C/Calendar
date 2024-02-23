@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mapper.MessageMapper">
+	<select id="getUnreadMessage" resultType="kr.co.domain.MessageVO">
+		select * from message where msg_recid = #{m_id} and msg_check = 0 order by msg_no desc
+	</select>
+	<insert id="sendMessage">
+		insert into message(msg_sendid, msg_recid, msg_content) values (#{msg_sendid}, #{msg_recid}, #{msg_content})
+	</insert>
+</mapper>
