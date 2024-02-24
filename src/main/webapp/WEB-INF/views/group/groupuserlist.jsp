@@ -20,13 +20,22 @@ ${gllist.g_name}<br>
 ${gllist.g_intro}<br>
 ${gllist.g_regdate}<br>
 ${gllist.g_public}
-
 <form action="/group/deletegr" method="post">
   <input type="hidden" id="g_no" name="g_no" value="${gllist.g_no}">
   <input type="submit" value="그룹삭제">
 </form>
 <div class="my-3 p-3 bg-body rounded shadow-sm">
-  <h6 class="border-bottom pb-2 mb-0">회원 목록</h6>
+  <form id="moveGr" action="" method="get">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" href="javascript:moveGrMain()">게시판</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="#">회원 목록</a>
+    </li>
+  </ul>
+    <input type="hidden" name="g_name" value="${gllist.g_name}">
+  </form>
   <c:forEach items="${mlist}" var="mlist">
   <div style="width: 100%;">
   <div class="btn-group dropend">
@@ -45,31 +54,10 @@ ${gllist.g_public}
   </div>
   </div>
   </c:forEach>
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" contenteditable="true" id="msgcontent">
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary" onclick="sendmsg()">보내기</button>
-        </div>
-      </div>
-    </div>
-  </div>
+
 <%@include file="../includes/body.jsp"%>
   <script>
-    function displaymodal(m_id){
-      console.log(m_id);
-      document.getElementById("exampleModalLabel").innerText = m_id;
-      $('#exampleModal').modal('show');
-    }
     function sendmsg(){
       var msg_recid = document.getElementById("exampleModalLabel").innerText;
       var msg_content = document.getElementById("msgcontent").innerText;
@@ -90,6 +78,10 @@ ${gllist.g_public}
         }
       });
       $('#exampleModal').modal('hide');
+    }
+    function moveGrMain(){
+      document.getElementById("moveGr").action = "/group/moveGrmain"
+      document.getElementById("moveGr").submit();
     }
   </script>
 <%@include file="../includes/footer.jsp"%>

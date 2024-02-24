@@ -8,4 +8,10 @@
 	<insert id="sendMessage">
 		insert into message(msg_sendid, msg_recid, msg_content) values (#{msg_sendid}, #{msg_recid}, #{msg_content})
 	</insert>
+	<update id="readOneMessage">
+		update message set msg_check = 1 where msg_no = #{msg_no};
+	</update>
+	<update id="readAllMessage">
+		update message set msg_check = 1 where msg_recid = #{m_id};
+	</update>
 </mapper>

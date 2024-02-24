@@ -8,4 +8,6 @@ import java.util.List;
 public interface MessageService {
     public List<MessageVO> getUnreadMessage(MemberVO member);
     public boolean sendMessage(MessageVO message);
+    public int readOneMessage(MessageVO message);
+    public int readAllMessage(MemberVO member);
 }

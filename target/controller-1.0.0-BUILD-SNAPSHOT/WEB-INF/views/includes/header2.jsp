@@ -12,14 +12,14 @@
     <div class="main">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-              <a class="navbar-brand" href="/">mydhcode</a>
+              <a class="navbar-brand" href="/"><img src="../resources/images/logo.png"></a>
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">무엇을</a>
+                    <a class="nav-link active" aria-current="page" href="#">공지</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">유저 찾기</a>
+                    <a class="nav-link" href="/member/movememberlist">유저 찾기</a>
                   </li>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -31,12 +31,13 @@
                       </c:if>
                       <c:if test="${sessionScope.login ne null}">
                         <li><a class="dropdown-item" href="/calendar/">스케줄</a></li>
-                        <li><a class="dropdown-item" href="/group/">그룹만들기</a></li>
+                        <li><a class="dropdown-item" href="/group/groupmake">그룹만들기</a></li>
+                        <li><a class="dropdown-item" href="#">그룹 목록</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <c:if test="${sessionScope.gList.size() eq 0}">
                           <li><a class="dropdown-item" href="#">가입한 그룹이 없습니다.</a></li>
                         </c:if>
-                        <form action="/group/moveGrPage" method="get" id="movePageForm">
+                        <form action="/group/moveGrmain" method="get" id="movePageForm">
                         <c:if test="${sessionScope.gList.size() ne 0}">
                           <c:forEach items="${sessionScope.gList}" var="list">
                             <li><a class="dropdown-item" href="javascript:moveGroupPage('${list.g_name}')">${list.g_name}</a></li>

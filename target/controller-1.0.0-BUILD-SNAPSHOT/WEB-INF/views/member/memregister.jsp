@@ -38,7 +38,7 @@
         </tr>
         <tr>
             <td>정보공개</td>
-            <td><input type="checkbox" id="publicchk" name="publicchk"></td>
+            <td><input type="checkbox" id="publicchk" name="publicchk" checked></td>
         </tr>
         <tr>
             <td colspan="2"><input type="submit" value="가입신청"></td>

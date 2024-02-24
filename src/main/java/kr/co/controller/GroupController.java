@@ -25,9 +25,9 @@ public class GroupController {
 	private MgroupService service;
 	private MemberService mservice;
 
-	@GetMapping("/")
-	public String main() {
-		return "/group/groupmain";
+	@GetMapping("/groupmake")
+	public String moveGroupMake() {
+		return "/group/groupmake";
 	}
 
 	@PostMapping("/makegroup")
@@ -52,17 +52,29 @@ public class GroupController {
 		return moveGroupPage(mgroupList, model);
 	}
 
-	@GetMapping("/moveGrPage")
+	@GetMapping("/moveGruserlist")
 	public String moveGroupPage(MgroupListVO mgroupList, Model model){
-		log.info("/moveGrPage...");
+		log.info(mgroupList);
 		MgroupListVO glList = service.getGroupByName(mgroupList);
 		model.addAttribute("gllist", glList);
 		MgroupVO mgroup = new MgroupVO();
 		mgroup.setG_name(glList.getG_name());
 		List<MemberVO> mList = mservice.listGroupMember(mgroup);
 		model.addAttribute("mlist", mList);
-		return "/group/grouppage";
+		return "/group/groupuserlist";
 	}
+	@GetMapping("/moveGrmain")
+	public String moveGroupBoard(MgroupListVO mgroupList, Model model){
+		log.info("/movegroupmain...");
+		MgroupListVO glList = service.getGroupByName(mgroupList);
+		model.addAttribute("gllist", glList);
+		MgroupVO mgroup = new MgroupVO();
+		mgroup.setG_name(glList.getG_name());
+		List<MemberVO> mList = mservice.listGroupMember(mgroup);
+		model.addAttribute("mlist", mList);
+		return "/group/groupmain";
+	}
+
 
 	@PostMapping("/deletegr")
 	public String deleteGroup(MgroupListVO mgroupList, HttpServletRequest req){

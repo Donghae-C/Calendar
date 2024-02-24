@@ -9,6 +9,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import kr.co.domain.MessageVO;
+import kr.co.service.MemberService;
+import kr.co.service.MessageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -28,7 +31,9 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class CalendarRestController {
 	private CalendarService service;
-	private MgroupService mservice;
+	private MgroupService gservice;
+	private MessageService msgservice;
+	private MemberService mservice;
     @GetMapping("/getdate")
     @ResponseBody
     public List<CalendarVO> getdate(@RequestParam("ca_year") String ca_year,
@@ -64,7 +69,7 @@ public class CalendarRestController {
 		MgroupVO mgroup = new MgroupVO();
 		mgroup.setM_id(m_id);
 		mgroup.setG_name(gr_name);
-		mgroup = mservice.getOneGroup(mgroup);
+		mgroup = gservice.getOneGroup(mgroup);
 		if(mgroup.getG_grade() == 3) {
 			model.addAttribute("auth","y");
 		}else {
@@ -85,6 +90,9 @@ public class CalendarRestController {
 							HttpServletRequest req) {
     	try {
 			log.info("/insertcal");
+			MgroupVO mgroup = new MgroupVO();
+			mgroup.setG_name(gr_name);
+			List<MemberVO> mlist = mservice.listGroupMember(mgroup);
 			HttpSession session = req.getSession(false);
 			MemberVO member = (MemberVO)session.getAttribute("login");
 			CalendarVO calendar = new CalendarVO();
@@ -101,7 +109,13 @@ public class CalendarRestController {
 			calendar.setC_content(ca_content);
 			calendar.setM_id(member.getM_id());
 			service.insertCal(calendar);
-			
+			MessageVO message = new MessageVO();
+			for(MemberVO mem:mlist){
+				message.setMsg_sendid("system");
+				message.setMsg_recid(mem.getM_id());
+				message.setMsg_content(gr_name+"에 새로운 일정<br>"+c_year+"/"+c_month+"/"+c_date+"<br>"+ca_title+"<br>이 등록되었습니다");
+				msgservice.sendMessage(message);
+			}
 			return ResponseEntity.ok("added successfully");
 		} catch (Exception e) {
 			log.error("Error in /insertcal", e);
@@ -124,7 +138,7 @@ public class CalendarRestController {
 		MgroupVO mgroup = new MgroupVO();
 		mgroup.setM_id(m_id);
 		mgroup.setG_name(gr_name);
-		mgroup = mservice.getOneGroup(mgroup);
+		mgroup = gservice.getOneGroup(mgroup);
 		String result;
 		if(mgroup.getG_grade() == 3) {
 			log.info("3이 맞음");
@@ -210,7 +224,7 @@ public class CalendarRestController {
 		MgroupVO mgroup = new MgroupVO();
 		mgroup.setM_id(m_id);
 		mgroup.setG_name(g_name);
-		mgroup = mservice.getOneGroup(mgroup);
+		mgroup = gservice.getOneGroup(mgroup);
 		if(mgroup.getG_grade() == 3) {
 			log.info("3이 맞음");
 			model.addAttribute("auth","y");

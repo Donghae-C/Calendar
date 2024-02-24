@@ -1,50 +1,92 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+         pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@include file="../includes/header.jsp"%>
-    <!-- style 세팅<style>태그 필요함-->
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<!-- style 세팅<style>태그 필요함-->
 <%@include file="../includes/header2.jsp"%>
-                  <li class="nav-item">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb"  style="padding: 8px;">
-                          <li class="breadcrumb-item"><a href="/">Home</a></li>
-                          <li class="breadcrumb-item active" aria-current="page">그룹만들기</li>
-                        </ol>
-                      </nav>
-                  </li>
+<li class="nav-item">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb"  style="padding: 8px;">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">curpage</li>
+    </ol>
+  </nav>
+</li>
 <%@include file="../includes/header3.jsp"%>
-    <div class="row">
-        <div class="col-2">그룹 이름</div>
-        <div class="col-8" id="gname" contenteditable="true"></div>
+${gllist.g_no}<br>
+${gllist.g_name}<br>
+${gllist.g_intro}<br>
+${gllist.g_regdate}<br>
+${gllist.g_public}
+<form action="/group/deletegr" method="post">
+  <input type="hidden" id="g_no" name="g_no" value="${gllist.g_no}">
+  <input type="submit" value="그룹삭제">
+</form>
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+  <form id="moveGr" action="" method="get">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" href="#">게시판</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="javascript:moveGrUserList()">회원 목록</a>
+    </li>
+  </ul>
+    <input type="hidden" name="g_name" value="${gllist.g_name}">
+  </form>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" contenteditable="true" id="msgcontent">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <button type="button" class="btn btn-primary" onclick="sendmsg()">보내기</button>
+        </div>
+      </div>
     </div>
-    <div class="row">
-        <div class="col-2">그룹 소개</div>
-        <div class="col-8" id="gintro" contenteditable="true"></div>
-    </div>
-    <div class="row">
-        <div class="col-2">공개 여부</div>
-        <div class="col-8"><input type="checkbox" id="gcheck" checked></div>
-    </div>
-    <div>
-        <a href="javascript:submitmake()" class="btn">만들기</a>
-    </div>
-    <form action="" id="makeGrForm" method="post">
-        <input type="hidden" id="gr_name" name="gr_name">
-        <input type="hidden" id="gr_intro" name="gr_intro">
-        <input type="hidden" id="gr_public" name="gr_public">
-    </form>
+  </div>
 <%@include file="../includes/body.jsp"%>
-	<script>
-        function submitmake(){
-            document.getElementById("gr_name").value = document.getElementById("gname").innerText;
-            document.getElementById("gr_intro").value = document.getElementById("gintro").innerText;
-            if(document.getElementById("gcheck").checked){
-                document.getElementById("gr_public").value = 0;
-            }else{
-                document.getElementById("gr_public").value = 1;
-            }
-            document.getElementById("makeGrForm").action = "/group/makegroup";
-            document.getElementById("makeGrForm").submit();
+  <script>
+    function displaymodal(m_id){
+      console.log(m_id);
+      document.getElementById("exampleModalLabel").innerText = m_id;
+      $('#exampleModal').modal('show');
+    }
+    function sendmsg(){
+      var msg_recid = document.getElementById("exampleModalLabel").innerText;
+      var msg_content = document.getElementById("msgcontent").innerText;
+      $.ajax({
+        type: 'POST',
+        url: '/msgrest/sendmsg',
+        data: {
+          msg_recid: msg_recid,
+          msg_content: msg_content
+        },
+        dataType: 'text',
+        success: function(result) {
+          // 성공 시 결과를 화면에 표시
+          console.log('성공')
+        },
+        error: function(error) {
+          console.log('Error:', error);
         }
-    </script>
+      });
+      $('#exampleModal').modal('hide');
+    }
+    function moveGrUserList(){
+      document.getElementById("moveGr").action = "/group/moveGruserlist"
+      document.getElementById("moveGr").submit();
+    }
+  </script>
+
 <%@include file="../includes/footer.jsp"%>

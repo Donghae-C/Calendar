@@ -29,4 +29,14 @@ public class MessageServiceImpl implements MessageService{
         }
         return result2;
     }
+
+    @Override
+    public int readOneMessage(MessageVO message) {
+        return mapper.readOneMessage(message);
+    }
+
+    @Override
+    public int readAllMessage(MemberVO member) {
+        return mapper.readAllMessage(member);
+    }
 }
