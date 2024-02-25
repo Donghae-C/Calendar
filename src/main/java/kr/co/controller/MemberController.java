@@ -31,9 +31,16 @@ public class MemberController {
 	private MgroupService mgservice;
 	
 	@GetMapping("/list")
-	public void listAll(Model model) {
+	public void listAll(Model model, HttpServletRequest req) {
 		log.info("list");
-		model.addAttribute("list", service.listAll());
+		HttpSession session = req.getSession(false);
+		MemberVO member = (MemberVO) session.getAttribute("login");
+		int grade = member.getM_grade();
+		if(grade == 3){
+			model.addAttribute("list", service.listAllByAdmin());
+		}else {
+			model.addAttribute("list", service.listAll());
+		}
 	}
 	
 	@PostMapping("/register")
@@ -113,10 +120,25 @@ public class MemberController {
 		return "/member/memregister";
 	}
 	@GetMapping("/movememberlist")
-	public String moveMemberList(Model model){
-		List<MemberVO> mlist = service.listAll();
+	public String moveMemberList(Model model, HttpServletRequest req){
+		HttpSession session = req.getSession(false);
+		MemberVO member = (MemberVO) session.getAttribute("login");
+		if(member == null){
+			return "/member/login";
+		}
+		int grade = member.getM_grade();
+		List<MemberVO> mlist;
+		if(grade == 3){
+			mlist = service.listAllByAdmin();
+		}else {
+			mlist = service.listAll();
+		}
 		model.addAttribute("memlist", mlist);
 		return "/member/memberlist";
-
 	}
+	@GetMapping("/movemypage")
+	public String moveMyPage(){
+		return "/member/mypage";
+	}
+
 }

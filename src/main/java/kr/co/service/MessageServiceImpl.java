@@ -5,7 +5,9 @@ import kr.co.domain.MessageVO;
 import kr.co.mapper.MessageMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +20,11 @@ public class MessageServiceImpl implements MessageService{
     @Override
     public List<MessageVO> getUnreadMessage(MemberVO member) {
         return mapper.getUnreadMessage(member);
+    }
+
+    @Override
+    public List<MessageVO> getAllMessage(MemberVO member) {
+        return mapper.getAllMessage(member);
     }
 
     @Override
@@ -38,5 +45,15 @@ public class MessageServiceImpl implements MessageService{
     @Override
     public int readAllMessage(MemberVO member) {
         return mapper.readAllMessage(member);
+    }
+
+    @Override
+    public int deleteMessage(MessageVO message) {
+        return mapper.deleteMessage(message);
+    }
+
+    @Override
+    public int countMessage(MemberVO member) {
+        return mapper.countMessage(member);
     }
 }

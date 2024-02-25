@@ -109,12 +109,14 @@ public class CalendarRestController {
 			calendar.setC_content(ca_content);
 			calendar.setM_id(member.getM_id());
 			service.insertCal(calendar);
-			MessageVO message = new MessageVO();
-			for(MemberVO mem:mlist){
-				message.setMsg_sendid("system");
-				message.setMsg_recid(mem.getM_id());
-				message.setMsg_content(gr_name+"에 새로운 일정<br>"+c_year+"/"+c_month+"/"+c_date+"<br>"+ca_title+"<br>이 등록되었습니다");
-				msgservice.sendMessage(message);
+			if(!gr_name.equals("내 캘린더")){
+				MessageVO message = new MessageVO();
+				for(MemberVO mem:mlist){
+					message.setMsg_sendid("system");
+					message.setMsg_recid(mem.getM_id());
+					message.setMsg_content(gr_name+"에 새로운 일정<br>"+c_year+"/"+c_month+"/"+c_date+"<br>"+ca_title+"<br>이 등록되었습니다");
+					msgservice.sendMessage(message);
+				}
 			}
 			return ResponseEntity.ok("added successfully");
 		} catch (Exception e) {

@@ -10,6 +10,8 @@ import kr.co.mapper.MgroupMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 @Log4j
@@ -72,6 +74,11 @@ public class MgroupServiceImpl implements MgroupService {
 			result2 = true;
 		}
 		return result2;
+	}
+
+	@Override
+	public List<MgroupListVO> getAllGroup() {
+		return mapper.getList();
 	}
 
 }

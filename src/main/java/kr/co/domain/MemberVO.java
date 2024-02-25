@@ -14,4 +14,6 @@ public class MemberVO {
     private int m_rating;
     private Date m_regdate;
     private int m_public;
+    private int limit;
+    private int offset;
 }

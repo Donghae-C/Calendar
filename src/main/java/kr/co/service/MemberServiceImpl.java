@@ -66,6 +66,11 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public List<MemberVO> listAllByAdmin() {
+		return mapper.getListByAdmin();
+	}
+
+	@Override
 	public List<MemberVO> listGroupMember(MgroupVO mgroup) {
 		
 		return mapper.getGroupMember(mgroup);

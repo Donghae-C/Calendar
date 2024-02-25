@@ -4,6 +4,11 @@
 <%@include file="../includes/header.jsp"%>
 <script src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<style>
+  .userbox{
+    width: 100px;
+  }
+</style>
 <!-- style 세팅<style>태그 필요함-->
 <%@include file="../includes/header2.jsp"%>
 <li class="nav-item">
@@ -21,9 +26,24 @@ ${gllist.g_intro}<br>
 ${gllist.g_regdate}<br>
 ${gllist.g_public}
 <form action="/group/deletegr" method="post">
+  <c:set var="nameExists" value="false" />
   <input type="hidden" id="g_no" name="g_no" value="${gllist.g_no}">
+  <c:forEach items="${sessionScope.gList}" var="list">
+    <c:if test="${list.g_name eq gllist.g_name && list.g_grade==3}">
   <input type="submit" value="그룹삭제">
+    </c:if>
+  </c:forEach>
+  <c:forEach items="${sessionScope.gList}" var="list">
+    <c:if test="${list.g_name eq gllist.g_name}">
+      <c:set var="nameExists" value="true" />
+  <input type="button" value="그룹탈퇴">
+    </c:if>
+  </c:forEach>
+  <c:if test="${not nameExists}">
+  <input type="button" value="가입신청">
+  </c:if>
 </form>
+
 <div class="my-3 p-3 bg-body rounded shadow-sm">
   <form id="moveGr" action="" method="get">
   <ul class="nav nav-tabs">
@@ -42,7 +62,7 @@ ${gllist.g_public}
     <div class="d-flex text-muted pt-3 btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
       <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
 
-      <p class="pb-3 mb-0 small lh-sm border-bottom">
+      <p class="pb-3 mb-0 small lh-sm border-bottom userbox">
         <strong class="d-block text-gray-dark">@${mlist.m_id}</strong>
         ${mlist.m_name}
       </p>

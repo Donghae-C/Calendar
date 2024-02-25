@@ -86,4 +86,11 @@ public class GroupController {
 		session.setAttribute("gList", gList);
 		return "redirect:/";
 	}
+	@GetMapping("/moveGrlist")
+	public String moveGroupList(Model model){
+		log.info("/movegroupmain...");
+		List<MgroupListVO> gllist = service.getAllGroup();
+		model.addAttribute("gllist", gllist);
+		return "/group/grouplist";
+	}
 }

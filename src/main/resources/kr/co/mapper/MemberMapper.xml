@@ -3,7 +3,10 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.mapper.MemberMapper">
 	<select id="getList" resultType="kr.co.domain.MemberVO">
-		select * from member
+		select * from member where m_grade not like 3 and m_public = 0;
+	</select>
+	<select id="getListByAdmin" resultType="kr.co.domain.MemberVO">
+		select * from member;
 	</select>
 	<select id="getGroupMember" resultType="kr.co.domain.MemberVO">
 		SELECT member.* FROM member JOIN mgroup ON member.m_id = mgroup.m_id WHERE mgroup.g_name = #{g_name}

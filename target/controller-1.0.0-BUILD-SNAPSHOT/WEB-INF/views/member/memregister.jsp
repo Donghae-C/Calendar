@@ -2,7 +2,11 @@
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@include file="../includes/header.jsp"%>
-<!-- style 세팅<style>태그 필요함-->
+<style>
+    #registerbox{
+        margin-top: 30px;
+    }
+</style>
 <%@include file="../includes/header2.jsp"%>
 <li class="nav-item">
     <nav aria-label="breadcrumb">
@@ -14,37 +18,47 @@
 </li>
 <%@include file="../includes/header3.jsp"%>
 <!-- body 세팅 -->
+<div id="registerbox">
 <form action="/member/register" method="post">
-    <table>
-        <tr>
-            <td>아이디</td>
-            <td><input type="text" id="m_id" name="m_id"></td>
-        </tr>
-        <tr>
-            <td>비밀번호</td>
-            <td><input type="password" id="m_pw" name="m_pw"></td>
-        </tr>
-        <tr>
-            <td>비밀번호 확인</td>
-            <td><input type="password" id="m_pw2" name="m_pw2"></td>
-        </tr>
-        <tr>
-            <td>이름</td>
-            <td><input type="text" id="m_name" name="m_name"></td>
-        </tr>
-        <tr>
-            <td>이메일</td>
-            <td><input type="text" id="m_email" name="m_email"></td>
-        </tr>
-        <tr>
-            <td>정보공개</td>
-            <td><input type="checkbox" id="publicchk" name="publicchk" checked></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit" value="가입신청"></td>
-        </tr>
-    </table>
+    <div class="row mb-3">
+        <label for="m_id" class="col-sm-2 col-form-label">ID</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="m_id" name="m_id">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="m_pw" class="col-sm-2 col-form-label">비밀번호</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" id="m_pw" name="m_pw">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="m_pw2" class="col-sm-2 col-form-label">비밀번호확인</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" id="m_pw2">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="m_name" class="col-sm-2 col-form-label">이름</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="m_name" name="m_name">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="m_name" class="col-sm-2 col-form-label">E-mail</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="m_email" name="m_email">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="m_name" class="col-sm-2 col-form-label">정보공개여부</label>
+        <div class="col-sm-10">
+            <input class="form-check-input" type="checkbox" id="publicchk" name="publicchk" checked>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">가입신청</button>
 </form>
+</div>
 <%@include file="../includes/body.jsp"%>
 <!-- js 세팅<script>태그 필요함 -->
 <%@include file="../includes/footer.jsp"%>

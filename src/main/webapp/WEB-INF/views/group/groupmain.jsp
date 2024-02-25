@@ -21,8 +21,22 @@ ${gllist.g_intro}<br>
 ${gllist.g_regdate}<br>
 ${gllist.g_public}
 <form action="/group/deletegr" method="post">
+  <c:set var="nameExists" value="false" />
   <input type="hidden" id="g_no" name="g_no" value="${gllist.g_no}">
-  <input type="submit" value="그룹삭제">
+  <c:forEach items="${sessionScope.gList}" var="list">
+    <c:if test="${list.g_name eq gllist.g_name && list.g_grade==3}">
+      <input type="submit" value="그룹삭제">
+    </c:if>
+  </c:forEach>
+  <c:forEach items="${sessionScope.gList}" var="list">
+    <c:if test="${list.g_name eq gllist.g_name}">
+      <c:set var="nameExists" value="true" />
+      <input type="button" value="그룹탈퇴">
+    </c:if>
+  </c:forEach>
+  <c:if test="${not nameExists}">
+    <input type="button" value="가입신청">
+  </c:if>
 </form>
 <div class="my-3 p-3 bg-body rounded shadow-sm">
   <form id="moveGr" action="" method="get">

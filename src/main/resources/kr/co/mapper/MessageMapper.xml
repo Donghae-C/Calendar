@@ -5,6 +5,12 @@
 	<select id="getUnreadMessage" resultType="kr.co.domain.MessageVO">
 		select * from message where msg_recid = #{m_id} and msg_check = 0 order by msg_no desc
 	</select>
+	<select id="getAllMessage" resultType="kr.co.domain.MessageVO">
+		select * from message where msg_recid = #{m_id} order by msg_no desc LIMIT #{limit} OFFSET #{offset};
+	</select>
+	<select id="countMessage" resultType="Integer">
+		select count(*) from message where msg_recid = #{m_id}
+	</select>
 	<insert id="sendMessage">
 		insert into message(msg_sendid, msg_recid, msg_content) values (#{msg_sendid}, #{msg_recid}, #{msg_content})
 	</insert>
@@ -14,4 +20,7 @@
 	<update id="readAllMessage">
 		update message set msg_check = 1 where msg_recid = #{m_id};
 	</update>
+	<delete id="deleteMessage">
+		delete from message where msg_no = #{msg_no}
+	</delete>
 </mapper>

@@ -11,6 +11,7 @@ public interface MemberService {
 	public boolean delete(MemberVO member);
 	public boolean update(MemberVO member);
 	public List<MemberVO> listAll();
+	public List<MemberVO> listAllByAdmin();
 	public List<MemberVO> listGroupMember(MgroupVO mgroup);
 	public List<MemberVO> searchbyName(MemberVO member);
 	public boolean login(MemberVO member);

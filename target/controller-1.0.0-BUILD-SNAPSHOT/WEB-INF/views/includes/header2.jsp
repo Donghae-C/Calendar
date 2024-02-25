@@ -32,7 +32,7 @@
                       <c:if test="${sessionScope.login ne null}">
                         <li><a class="dropdown-item" href="/calendar/">스케줄</a></li>
                         <li><a class="dropdown-item" href="/group/groupmake">그룹만들기</a></li>
-                        <li><a class="dropdown-item" href="#">그룹 목록</a></li>
+                        <li><a class="dropdown-item" href="/group/moveGrlist">그룹 목록</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <c:if test="${sessionScope.gList.size() eq 0}">
                           <li><a class="dropdown-item" href="#">가입한 그룹이 없습니다.</a></li>

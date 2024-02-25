@@ -69,6 +69,23 @@ public class MessageRestController {
         } catch (JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred");
         }
+    }
+    @PostMapping("/deletemsg")
+    @ResponseBody
+    public ResponseEntity<String> deleteMessage(@RequestParam("msg_nos") String msg_nos){
+        log.info(msg_nos);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            int[] msgnos = objectMapper.readValue(msg_nos, int[].class);
+            MessageVO message = new MessageVO();
+            for(int msg_no:msgnos){
+                message.setMsg_no(msg_no);
+                service.deleteMessage(message);
+            }
+            return ResponseEntity.ok("added successfully");
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred");
+        }
 
     }
 }

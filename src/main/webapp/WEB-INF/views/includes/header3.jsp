@@ -12,7 +12,8 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
                 <c:if test="${sessionScope.login ne null}">
-                    <li><a class="dropdown-item" href="#">마이페이지</a></li>
+                    <li><a class="dropdown-item" href="/member/movemypage">마이페이지</a></li>
+                    <li><a class="dropdown-item" href="/message/movemymsg">내 쪽지함</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <a class="dropdown-item" href="/member/logout">로그아웃</a>
