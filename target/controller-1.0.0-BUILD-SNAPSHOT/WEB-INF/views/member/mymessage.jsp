@@ -13,15 +13,8 @@
                       </nav>
                   </li>
 <%@include file="../includes/header3.jsp"%>
+<form action="/message/deletemsg" method="post">
 	<c:forEach items="${msglist}" var="msg">
-        <div class="row">
-            <div class="col-1">
-
-            </div>
-            <div class="col-8 ellipsis">
-
-            </div>
-        </div>
         <div class="card">
             <div class="card-header">
                 <input type="checkbox" value="${msg.msg_no}">보낸사람 : ${msg.msg_sendid}
@@ -31,6 +24,7 @@
             </div>
         </div>
     </c:forEach>
+</form>
 <nav aria-label="...">
     <ul class="pagination">
         <li class="page-item disabled">
