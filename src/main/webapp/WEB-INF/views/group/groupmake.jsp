@@ -2,21 +2,11 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@include file="../includes/header.jsp"%>
-    <style>
-        .ginputbox{
-            background-color: #999999;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-        .gnamebox{
-            min-width: 100px;
-            max-width: 120px;
-            margin-top: 10px;
-        }
-        .gcheckbox{
-            margin-top: 10px;
-        }
-    </style>
+<style>
+    #grregisterbox{
+        margin-top: 30px;
+    }
+</style>
 <%@include file="../includes/header2.jsp"%>
                   <li class="nav-item">
                     <nav aria-label="breadcrumb">
@@ -27,31 +17,38 @@
                       </nav>
                   </li>
 <%@include file="../includes/header3.jsp"%>
-    <div class="row">
-        <div class="col-2 gnamebox">그룹 이름</div>
-        <div class="col-8 ginputbox" id="gname" contenteditable="true"></div>
-    </div>
-    <div class="row">
-        <div class="col-2 gnamebox">그룹 소개</div>
-        <div class="col-8 ginputbox" id="gintro" contenteditable="true"></div>
-    </div>
-    <div class="row">
-        <div class="col-2 gnamebox">공개 여부</div>
-        <div class="col-8 gcheckbox"><input type="checkbox" id="gcheck" checked></div>
-    </div>
-    <div>
-        <a href="javascript:submitmake()" class="btn">만들기</a>
-    </div>
     <form action="" id="makeGrForm" method="post">
         <input type="hidden" id="gr_name" name="gr_name">
         <input type="hidden" id="gr_intro" name="gr_intro">
         <input type="hidden" id="gr_public" name="gr_public">
     </form>
+
+<div id="grregisterbox">
+        <div class="row mb-3">
+            <label for="gname" class="col-sm-2 col-form-label">그룹이름</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="gname">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="gintro" class="col-sm-2 col-form-label">그룹소개</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="gintro">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="gcheck" class="col-sm-2 col-form-label">정보공개여부</label>
+            <div class="col-sm-10">
+                <input class="form-check-input" type="checkbox" id="gcheck" checked>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="javascript:submitmake()">가입신청</button>
+</div>
 <%@include file="../includes/body.jsp"%>
 	<script>
         function submitmake(){
-            document.getElementById("gr_name").value = document.getElementById("gname").innerText;
-            document.getElementById("gr_intro").value = document.getElementById("gintro").innerText;
+            document.getElementById("gr_name").value = document.getElementById("gname").value;
+            document.getElementById("gr_intro").value = document.getElementById("gintro").value;
             if(document.getElementById("gcheck").checked){
                 document.getElementById("gr_public").value = 0;
             }else{
