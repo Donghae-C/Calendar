@@ -26,31 +26,50 @@ public class MessageController {
     @GetMapping("/movemymsg")
     public String moveMyPage(@RequestParam(defaultValue = "1") int page, Model model, HttpServletRequest req){
         log.info(page);
+
+        // 세션에서 회원 정보를 가져옴
         HttpSession session = req.getSession(false);
         MemberVO member = (MemberVO) session.getAttribute("login");
         String m_id = member.getM_id();
-        int limit = 5;
-        int offset = (page-1) * limit;
+
+        // 페이징 처리를 위한 변수 설정
+        int limit = 5;  // 한 페이지당 표시할 아이템 수
+        int offset = (page - 1) * limit;  // 조회 시작 위치
         member.setLimit(limit);
         member.setOffset(offset);
+
+        // 회원의 메시지 목록을 조회
         List<MessageVO> msglist = service.getAllMessage(member);
         model.addAttribute("msglist", msglist);
 
+        // 전체 메시지 수 조회
         int number = service.countMessage(member);
         int pagenum;
-        List<Integer> pagenums = new ArrayList<>();
-        if(number == 0){
+
+        // 전체 페이지 수 계산
+        if (number == 0) {
             pagenum = 1;
-        } else if (number%5 == 0) {
-            pagenum = number/5;
+        } else if (number % 5 == 0) {
+            pagenum = number / 5;
         } else {
-            pagenum = (number/5) + 1;
+            pagenum = (number / 5) + 1;
         }
-        for(int i=1;i<pagenum+1;i++){
-            pagenums.add(i);
+
+        // 첫 페이지와 마지막 페이지 정보 계산
+        int pageSize = 5; // 페이지당 표시할 아이템 수
+        int startPage = (page - 1) / pageSize * pageSize + 1;  // 현재 페이지 기준 첫 페이지
+        int lastPage = startPage + pageSize - 1;  // 현재 페이지 기준 마지막 페이지
+
+        // 마지막 페이지가 전체 페이지 수를 초과하지 않도록 조정
+        if (lastPage > pagenum) {
+            lastPage = pagenum;
         }
+
+        // 모델에 첫 페이지, 현재 페이지, 마지막 페이지 정보를 추가
+        model.addAttribute("startPage", startPage);
         model.addAttribute("curpage", page);
-        model.addAttribute("page", pagenums);
+        model.addAttribute("lastPage", lastPage);
+
         return "/member/mymessage";
     }
 }
